@@ -102,7 +102,7 @@ export default function GamePage() {
 
   if (game.status === "setup") {
     return (
-      <div className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-6">
+      <div className="mx-auto flex h-[100dvh] max-w-md flex-col px-4 py-6">
         <div className="mb-6 flex items-center justify-between">
           <Button variant="ghost" size="sm" onPress={() => router.push("/")}>
             ← Retour
@@ -120,30 +120,32 @@ export default function GamePage() {
           </Button>
         </div>
 
-        {game.players.length === 0 ? (
-          <p className="py-12 text-center text-gray-400">
-            Aucun joueur pour le moment
-          </p>
-        ) : (
-          <div className="flex flex-col gap-3">
-            {game.players.map((player) => (
-              <Card key={player.id}>
-                <Card.Content className="flex flex-row items-center justify-between py-3 px-4">
-                  <span className="font-medium">{player.name}</span>
-                  <Button
-                    variant="danger"
-                    size="sm"
-                    onPress={() => removePlayer(player.id)}
-                  >
-                    Supprimer
-                  </Button>
-                </Card.Content>
-              </Card>
-            ))}
-          </div>
-        )}
+        <div className="flex-1 overflow-y-auto">
+          {game.players.length === 0 ? (
+            <p className="py-12 text-center text-gray-400">
+              Aucun joueur pour le moment, ajoutez des joueurs pour commencer la partie !
+            </p>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {game.players.map((player) => (
+                <Card key={player.id}>
+                  <Card.Content className="flex flex-row items-center justify-between py-3 px-4">
+                    <span className="font-medium">{player.name}</span>
+                    <Button
+                      variant="danger"
+                      size="sm"
+                      onPress={() => removePlayer(player.id)}
+                    >
+                      Supprimer
+                    </Button>
+                  </Card.Content>
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
 
-        <div className="mt-auto pt-6">
+        <div className="shrink-0 pt-4 pb-2">
           <Button
             variant="primary"
             className="w-full"
@@ -199,12 +201,12 @@ export default function GamePage() {
   if (game.winner) {
     const sorted = [...game.players].sort((a, b) => b.totalScore - a.totalScore);
     return (
-      <div className="mx-auto flex min-h-screen max-w-md flex-col items-center justify-center px-4 gap-6">
+      <div className="mx-auto flex h-[100dvh] max-w-md flex-col items-center justify-center px-4 gap-6">
         <h1 className="text-3xl font-bold">Partie terminee !</h1>
         <p className="text-xl">
           {sorted[0].name} remporte la partie !
         </p>
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex-1 overflow-y-auto flex flex-col gap-2">
           {sorted.map((p, i) => (
             <div
               key={p.id}
@@ -217,16 +219,18 @@ export default function GamePage() {
             </div>
           ))}
         </div>
-        <Button variant="primary" onPress={() => router.push("/")}>
-          Retour
-        </Button>
+        <div className="shrink-0 w-full pb-2">
+          <Button variant="primary" className="w-full" onPress={() => router.push("/")}>
+            Retour
+          </Button>
+        </div>
       </div>
     );
   }
 
   // Playing phase
   return (
-    <div className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-6">
+    <div className="mx-auto flex h-[100dvh] max-w-md flex-col px-4 py-6">
       <div className="mb-6 flex items-center justify-between">
         <Button variant="ghost" size="sm" onPress={() => router.push("/")}>
           ← Retour
@@ -235,7 +239,7 @@ export default function GamePage() {
         <div className="w-16" />
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex-1 overflow-y-auto flex flex-col gap-4">
         {game.players.map((player) => (
           <div key={player.id} ref={(el) => { cardRefs.current[player.id] = el; }}>
           <Card>
@@ -281,7 +285,7 @@ export default function GamePage() {
         ))}
       </div>
 
-      <div className="mt-auto pt-6">
+      <div className="shrink-0 pt-4 pb-2">
         <Button
           variant="primary"
           className="w-full"
