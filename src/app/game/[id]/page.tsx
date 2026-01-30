@@ -312,6 +312,8 @@ export default function GamePage() {
                     const count = activePlayer
                       ? activePlayer.cards.filter((c) => c === cardId).length
                       : 0;
+                    const isNumber = !isNaN(Number(cardId));
+                    const disabled = isNumber && count > 0;
                     return (
                       <button
                         key={cardId}
@@ -320,7 +322,7 @@ export default function GamePage() {
                             ? "border-blue-500 ring-2 ring-blue-300"
                             : "border-gray-200"
                         }`}
-                        onClick={() => addCard(cardId)}
+                        onClick={() => !disabled && addCard(cardId)}
                       >
                         <Image
                           src={`/cards/${cardId}.png`}
@@ -330,9 +332,20 @@ export default function GamePage() {
                           sizes="80px"
                         />
                         {count > 0 && (
-                          <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-bl bg-blue-500 text-xs font-bold text-white">
-                            {count}
-                          </span>
+                          <>
+                            <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-bl bg-blue-500 text-xs font-bold text-white">
+                              {count}
+                            </span>
+                            <span
+                              className="absolute top-0 left-0 flex h-5 w-5 items-center justify-center rounded-br bg-red-500 text-xs font-bold text-white cursor-pointer"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                removeCard(activePlayerId!, cardId);
+                              }}
+                            >
+                              −
+                            </span>
+                          </>
                         )}
                       </button>
                     );
